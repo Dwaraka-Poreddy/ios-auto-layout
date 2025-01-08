@@ -12,6 +12,8 @@
 		1D72F2F52D1FC48300092275 /* Challenge.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D72F2F42D1FC48300092275 /* Challenge.swift */; };
 		1D72F2F72D1FC4BF00092275 /* Factories.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D72F2F62D1FC4BF00092275 /* Factories.swift */; };
 		1D72F2F92D1FC93400092275 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 1D72F2F82D1FC93400092275 /* LaunchScreen.storyboard */; };
+		1DEB53942D2E0D6F0081989D /* RowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1DEB53932D2E0D6F0081989D /* RowView.swift */; };
+		1DEB53962D2E10F30081989D /* CrossfadeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1DEB53952D2E10F30081989D /* CrossfadeView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -22,6 +24,8 @@
 		1D72F2F42D1FC48300092275 /* Challenge.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Challenge.swift; sourceTree = "<group>"; };
 		1D72F2F62D1FC4BF00092275 /* Factories.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Factories.swift; sourceTree = "<group>"; };
 		1D72F2F82D1FC93400092275 /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = LaunchScreen.storyboard; sourceTree = "<group>"; };
+		1DEB53932D2E0D6F0081989D /* RowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RowView.swift; sourceTree = "<group>"; };
+		1DEB53952D2E10F30081989D /* CrossfadeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CrossfadeView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -60,6 +64,8 @@
 				1D72F2EE2D1FC33F00092275 /* Info.plist */,
 				1D72F2F42D1FC48300092275 /* Challenge.swift */,
 				1D72F2F62D1FC4BF00092275 /* Factories.swift */,
+				1DEB53932D2E0D6F0081989D /* RowView.swift */,
+				1DEB53952D2E10F30081989D /* CrossfadeView.swift */,
 			);
 			path = SpotifyConfigurationScreen;
 			sourceTree = "<group>";
@@ -137,6 +143,8 @@
 				1D72F2F72D1FC4BF00092275 /* Factories.swift in Sources */,
 				1D72F2F52D1FC48300092275 /* Challenge.swift in Sources */,
 				1D72F2E12D1FC33D00092275 /* AppDelegate.swift in Sources */,
+				1DEB53942D2E0D6F0081989D /* RowView.swift in Sources */,
+				1DEB53962D2E10F30081989D /* CrossfadeView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
