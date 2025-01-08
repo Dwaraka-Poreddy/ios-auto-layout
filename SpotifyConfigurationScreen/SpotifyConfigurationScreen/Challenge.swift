@@ -8,8 +8,7 @@ import UIKit
 
 class Challenge: UIViewController {
     
-    let margin: CGFloat = 20
-    let spacing: CGFloat = 32
+    let margin: CGFloat = 16
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -23,24 +22,30 @@ class Challenge: UIViewController {
     
     /*
      
-     Solution: Here we have extracted two new CustomViews and laid them out. This considerable reduces the amount of code in our ViewController
-     and makes maintenance of code a lot easier.
+     Challenge: See if you can embed all these controls in a StackView like this.
      
-     ┌───────────────┐        ┌───────────────┐
-     │               │        │               │
-     │               ├────────▶    RowView    │ x4
-     │               │        │               │
-     │               │        └───────────────┘
-     │   Challenge   │ extract
-     │               │
-     │               │        ┌───────────────┐
-     │               │        │               │
-     │               ├────────▶ CrossfadeView │ x1
-     │               │        │               │
-     └───────────────┘        └───────────────┘
+     ┌────────StackView─────────┐
+     │                          │
+     │        offlineRow        │
+     │                          │
+     │      offlineSublabel     │
+     │                          │   axis = vertical
+     │       crossfadeView      │   distribution = fill
+     │                          │   alignment = fill
+     │        gaplessRow        │   spacing = 20
+     │                          │
+     │       hideSongsRow       │
+     │                          │
+     │     normalizationRow     │
+     │                          │
+     └──────────────────────────┘
      
      */
+    
     func setupViews() {
+        let stackView = makeStackView(withOrientation: .vertical)
+        stackView.spacing = 20
+        
         let offlineRow = RowView(title: "Offline", isOn: false)
         let offlineSublabel = makeSubLabel(withText: "When you go offline, you'll only be able to play the music and podcasts you've downloaded.")
         let crossfadeView = CrossfadeView()
@@ -49,42 +54,23 @@ class Challenge: UIViewController {
         let hideSongsRow = RowView(title: "Hide Unplayable Songs", isOn: true)
         let normalizationRow = RowView(title: "Enable Audio Normalization", isOn: true)
         
-        offlineRow.translatesAutoresizingMaskIntoConstraints = false
-        crossfadeView.translatesAutoresizingMaskIntoConstraints = false
-        gaplessRow.translatesAutoresizingMaskIntoConstraints = false
-        hideSongsRow.translatesAutoresizingMaskIntoConstraints = false
-        normalizationRow.translatesAutoresizingMaskIntoConstraints = false
+        stackView.translatesAutoresizingMaskIntoConstraints = false
         
-        view.addSubview(offlineRow)
-        view.addSubview(offlineSublabel)
-        view.addSubview(crossfadeView)
+        stackView.addArrangedSubview(offlineRow)
+        stackView.addArrangedSubview(offlineSublabel)
+        stackView.addArrangedSubview(crossfadeView)
         
-        view.addSubview(gaplessRow)
-        view.addSubview(hideSongsRow)
-        view.addSubview(normalizationRow)
+        stackView.addArrangedSubview(gaplessRow)
+        stackView.addArrangedSubview(hideSongsRow)
+        stackView.addArrangedSubview(normalizationRow)
         
-        offlineRow.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: margin).isActive = true
-        offlineRow.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: margin).isActive = true
-        offlineRow.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -margin).isActive = true
+        view.addSubview(stackView)
         
-        offlineSublabel.topAnchor.constraint(equalTo: offlineRow.bottomAnchor, constant: margin).isActive = true
-        offlineSublabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: margin).isActive = true
-        offlineSublabel.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -margin).isActive = true
+        stackView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor).isActive = true
+        stackView.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
+        stackView.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
         
-        crossfadeView.topAnchor.constraint(equalTo: offlineSublabel.bottomAnchor, constant: margin).isActive = true
-        crossfadeView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: margin).isActive = true
-        crossfadeView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -margin).isActive = true
-        
-        gaplessRow.topAnchor.constraint(equalTo: crossfadeView.bottomAnchor, constant: margin).isActive = true
-        gaplessRow.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: margin).isActive = true
-        gaplessRow.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -margin).isActive = true
-        
-        hideSongsRow.topAnchor.constraint(equalTo: gaplessRow.bottomAnchor, constant: margin).isActive = true
-        hideSongsRow.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: margin).isActive = true
-        hideSongsRow.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -margin).isActive = true
-        
-        normalizationRow.topAnchor.constraint(equalTo: hideSongsRow.bottomAnchor, constant: margin).isActive = true
-        normalizationRow.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: margin).isActive = true
-        normalizationRow.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -margin).isActive = true
+        stackView.isLayoutMarginsRelativeArrangement = true
+        stackView.directionalLayoutMargins = NSDirectionalEdgeInsets(top: margin, leading: margin, bottom: margin, trailing: margin)
     }
 }
