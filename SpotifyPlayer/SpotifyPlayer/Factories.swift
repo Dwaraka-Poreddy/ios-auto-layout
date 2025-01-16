@@ -107,6 +107,33 @@ func makeSpotifyButton(withText title: String) -> UIButton {
     return button
 }
 
+func makeStackView(withOrientation axis: NSLayoutConstraint.Axis) -> UIStackView {
+    let stackView = UIStackView()
+    stackView.translatesAutoresizingMaskIntoConstraints = false
+    stackView.axis = axis
+    stackView.distribution = .fill
+    stackView.alignment = .fill
+    stackView.spacing = 8.0
+    
+    return stackView
+}
+
+public func makeSpacerView(height: CGFloat? = nil) -> UIView {
+    let spacerView = UIView(frame: .zero)
+    if let height = height {
+        spacerView.heightAnchor.constraint(equalToConstant: height).setActiveBreakable()
+    }
+    spacerView.translatesAutoresizingMaskIntoConstraints = false
+    return spacerView
+}
+
+public extension NSLayoutConstraint {
+    @objc func setActiveBreakable(priority: UILayoutPriority = UILayoutPriority(900)) {
+        self.priority = priority
+        isActive = true
+    }
+}
+
 extension UIColor {
     static let spotifyGreen = UIColor(red: 28/255, green: 184/255, blue: 89/255, alpha: 1)
 }

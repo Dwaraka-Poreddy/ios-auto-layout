@@ -9,14 +9,39 @@ import UIKit
 
 class CHCRImage: UIViewController {
     let buttonHeight: CGFloat = 40
+    var stackView: UIStackView
+    var centerYConstraint = NSLayoutConstraint()
+    var topSpacer: UIView
+    var bottomSpacer: UIView
+    
+    init() {
+        stackView = makeStackView(withOrientation: .vertical)
+        topSpacer = makeSpacerView(height: 100)
+        topSpacer.backgroundColor = .red
+        bottomSpacer = makeSpacerView(height: 100)
+        bottomSpacer.backgroundColor = .blue
+        
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        registerForOrientationChanges()
         setupViews()
+    }
+    
+    func registerForOrientationChanges() {
+        NotificationCenter.default.addObserver(self, selector: #selector(CHCRImage.rotated), name: UIDevice.orientationDidChangeNotification, object: nil)
     }
     
     func setupViews() {
         navigationItem.title = "CHCR - Image"
+        
         
         let albumImage = makeImageView(named: "rush")
         let trackLabel = makeTrackLabel(withText: "Tom Sawyer")
@@ -28,37 +53,53 @@ class CHCRImage: UIViewController {
         let progressView = makeProgressView()
         
         let spotifyButton = makeSpotifyButton(withText: "PLAY ON SPOTIFY")
+        let bottomView = makeStackView(withOrientation: .vertical)
+        let playView = UIView()
+        bottomView.alignment = .center
+        bottomView.translatesAutoresizingMaskIntoConstraints = false
         
-        view.addSubview(albumImage)
-        view.addSubview(trackLabel)
-        view.addSubview(albumLabel)
+        stackView.addArrangedSubview(albumImage)
+        stackView.addArrangedSubview(bottomView)
         
-        view.addSubview(playButton)
-        view.addSubview(previewStartLabel)
-        view.addSubview(progressView)
-        view.addSubview(previewEndLabel)
+        view.addSubview(stackView)
         
-        view.addSubview(spotifyButton)
+        bottomView.addArrangedSubview(topSpacer)
+        bottomView.addArrangedSubview(trackLabel)
+        bottomView.addArrangedSubview(albumLabel)
         
-        albumImage.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor).isActive = true
-        albumImage.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
+        bottomView.addArrangedSubview(playView)
+        
+        
+        bottomView.addArrangedSubview(spotifyButton)
+        bottomView.addArrangedSubview(bottomSpacer)
+        
+        playView.addSubview(playButton)
+        playView.addSubview(previewStartLabel)
+        playView.addSubview(progressView)
+        playView.addSubview(previewEndLabel)
+        
+        stackView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor).isActive = true
+        stackView.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
+        stackView.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
+        
+        
         albumImage.heightAnchor.constraint(equalTo: albumImage.widthAnchor, multiplier: 1).isActive = true
-        albumImage.widthAnchor.constraint(equalToConstant: view.bounds.width).isActive = true
+        albumImage.widthAnchor.constraint(equalToConstant: stackView.bounds.width).isActive = true
+        bottomSpacer.heightAnchor.constraint(equalToConstant: 100).isActive = true
         
-        trackLabel.topAnchor.constraint(equalTo: albumImage.bottomAnchor, constant: 8).isActive = true
-        trackLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 8).isActive = true
-        trackLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -8).isActive = true
+        // Define bottomView's height based on its children
+        bottomView.topAnchor.constraint(equalTo: albumImage.bottomAnchor, constant: 16).isActive = true
+        bottomView.widthAnchor.constraint(equalToConstant: stackView.bounds.width).isActive = true
+        bottomView.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: 16).isActive = true
         
-        albumLabel.topAnchor.constraint(equalTo: trackLabel.bottomAnchor, constant: 8).isActive = true
-        albumLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
+        playView.leadingAnchor.constraint(equalTo: bottomView.leadingAnchor).isActive = true
+        playView.trailingAnchor.constraint(equalTo: bottomView.trailingAnchor).isActive = true
+        playView.heightAnchor.constraint(equalToConstant: 56).isActive = true
         
-        playButton.topAnchor.constraint(equalTo: albumLabel.bottomAnchor, constant: 8).isActive = true
-        playButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 8).isActive = true
+        playButton.topAnchor.constraint(equalTo: playView.topAnchor, constant: 8).isActive = true
+        playButton.leadingAnchor.constraint(equalTo: playView.leadingAnchor, constant: 8).isActive = true
         playButton.heightAnchor.constraint(equalToConstant: buttonHeight).isActive = true
         playButton.widthAnchor.constraint(equalToConstant: buttonHeight).isActive = true
-        
-        previewStartLabel.centerYAnchor.constraint(equalTo: playButton.centerYAnchor).isActive = true
-        previewStartLabel.leadingAnchor.constraint(equalTo: playButton.trailingAnchor, constant: 8).isActive = true
         
         previewStartLabel.centerYAnchor.constraint(equalTo: playButton.centerYAnchor).isActive = true
         previewStartLabel.leadingAnchor.constraint(equalTo: playButton.trailingAnchor, constant: 8).isActive = true
@@ -68,14 +109,31 @@ class CHCRImage: UIViewController {
         
         previewEndLabel.centerYAnchor.constraint(equalTo: playButton.centerYAnchor).isActive = true
         previewEndLabel.leadingAnchor.constraint(equalTo: progressView.trailingAnchor, constant: 8).isActive = true
-        previewEndLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -8).isActive = true
+        previewEndLabel.trailingAnchor.constraint(equalTo: playView.trailingAnchor, constant: -8).isActive = true
         
-        spotifyButton.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
-        spotifyButton.topAnchor.constraint(equalTo: progressView.bottomAnchor, constant: 32).isActive = true
+        spotifyButton.centerXAnchor.constraint(equalTo: bottomView.centerXAnchor).isActive = true
         spotifyButton.heightAnchor.constraint(equalToConstant: buttonHeight).isActive = true
+        
+        albumLabel.heightAnchor.constraint(equalToConstant: 40).isActive = true
+        trackLabel.heightAnchor.constraint(equalToConstant: 40).isActive = true
+        centerYConstraint = stackView.centerYAnchor.constraint(equalTo: view.centerYAnchor)
         
         // spotifyButton.heightAnchor we need to set to get our nice rounded corners - height is fixed
         // spotifyButton.widthAnchor we don't need to set because the intrinsic content size and insets are enough - width is dynamic
     }
-
+    
+    @objc func rotated() {
+        if UIDevice.current.orientation.isLandscape {
+            stackView.axis = .horizontal
+            centerYConstraint.isActive = true
+        } else {
+            stackView.axis = .vertical
+            centerYConstraint.isActive = true
+        }
+    }
+    
+    deinit {
+        NotificationCenter.default.removeObserver(self)
+    }
+    
 }
